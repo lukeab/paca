@@ -9,6 +9,9 @@ The package version follows the main Paca repository release and is published on
 ### Fixed
 - `create_sprint` and `update_sprint` accept a `goal`, and `update_sprint` clears it when `goal` is `null` ([#597](https://github.com/Paca-AI/paca/issues/597)).
 - `update_task` accepts `sprintId: null`, which moves the task out of its sprint and back to the backlog ([#597](https://github.com/Paca-AI/paca/issues/597)).
+- `update_task` accepts `null` for `assigneeId` (unassigns), `startDate` and `dueDate` (clears the date); the API already allowed it but the tool schema rejected it ([#611](https://github.com/Paca-AI/paca/issues/611)). `statusId` and `typeId` stay plain strings on purpose: the API accepts `null` for them too, but a task with no status or type sits in no board column. The start and due date descriptions now say RFC 3339 timestamp, which is what the API accepts; a date-only value is rejected.
+- Preserve legacy link URLs when inline text omits `styles` or sets it to `null`; malformed content still degrades safely to text.
+- Malformed BlockNote links in comments degrade to recoverable plain text instead of breaking MCP task and activity reads ([#589](https://github.com/Paca-AI/paca/issues/589)).
 
 ### Added
 - **`search_docs` and `search_tasks`** — keyword search across document titles + body text and task titles/`#number`/descriptions, returning compact results with excerpts so agents can find context without walking `list_docs` / paging `list_tasks`. Backed by a new `GET /projects/{id}/docs/search` endpoint and a `search_content=true` option on the task list endpoint. Matching is literal and case-insensitive (not fuzzy/semantic) and is per text run, so a phrase split across differently-formatted runs may not match.

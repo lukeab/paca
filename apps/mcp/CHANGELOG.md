@@ -6,6 +6,9 @@ The package version follows the main Paca repository release and is published on
 
 ## [Unreleased]
 
+### Fixed
+- `create_sprint` and `update_sprint` accept a `goal`, and `update_sprint` clears it when `goal` is `null` ([#597](https://github.com/Paca-AI/paca/issues/597)).
+
 ### Added
 - **`search_docs` and `search_tasks`** — keyword search across document titles + body text and task titles/`#number`/descriptions, returning compact results with excerpts so agents can find context without walking `list_docs` / paging `list_tasks`. Backed by a new `GET /projects/{id}/docs/search` endpoint and a `search_content=true` option on the task list endpoint. Matching is literal and case-insensitive (not fuzzy/semantic) and is per text run, so a phrase split across differently-formatted runs may not match.
 

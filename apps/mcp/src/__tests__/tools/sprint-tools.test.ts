@@ -114,7 +114,26 @@ describe("handleSprintTool – create_sprint", () => {
 			name: "Sprint 1",
 			start_date: "2024-01-01",
 			end_date: "2024-01-14",
+			goal: undefined,
 		});
+	});
+
+	it("passes goal through to client.createSprint", async () => {
+		const client = makeClient();
+		await handleSprintTool(
+			"create_sprint",
+			{
+				projectId: "p1",
+				name: "Sprint 1",
+				startDate: "2024-01-01",
+				endDate: "2024-01-14",
+				goal: "Ship the demo",
+			},
+			client,
+		);
+		expect(client.createSprint).toHaveBeenCalledWith(
+			expect.objectContaining({ goal: "Ship the demo" }),
+		);
 	});
 
 	it("includes 'created successfully' in response", async () => {
@@ -154,7 +173,36 @@ describe("handleSprintTool – update_sprint", () => {
 			name: "Sprint 2",
 			start_date: undefined,
 			end_date: undefined,
+			goal: undefined,
 		});
+	});
+
+	it("passes goal through to client.updateSprint", async () => {
+		const client = makeClient();
+		await handleSprintTool(
+			"update_sprint",
+			{ projectId: "p1", sprintId: "s1", goal: "Ship the demo" },
+			client,
+		);
+		expect(client.updateSprint).toHaveBeenCalledWith(
+			"p1",
+			"s1",
+			expect.objectContaining({ goal: "Ship the demo" }),
+		);
+	});
+
+	it("passes goal null through to clear the goal", async () => {
+		const client = makeClient();
+		await handleSprintTool(
+			"update_sprint",
+			{ projectId: "p1", sprintId: "s1", goal: null },
+			client,
+		);
+		expect(client.updateSprint).toHaveBeenCalledWith(
+			"p1",
+			"s1",
+			expect.objectContaining({ goal: null }),
+		);
 	});
 
 	it("includes 'updated successfully' in response", async () => {
